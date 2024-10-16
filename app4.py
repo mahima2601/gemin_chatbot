@@ -41,21 +41,21 @@ if user_input:
     st.chat_message("user").markdown(user_input)
 
     # Check if the user is referring to a point in the previous list
-    if "point" in user_input.lower() and st.session_state.list_response:
-        point_number = extract_point_number(user_input)
-        if point_number and point_number <= len(st.session_state.list_response):
+    point_number = extract_point_number(user_input)  # Extract point number if present
+    if point_number and st.session_state.list_response:
+        if point_number <= len(st.session_state.list_response):
             # Respond with details about the referenced point
             referenced_point = st.session_state.list_response[point_number - 1]
             gemini_response = f"Details about point {point_number}: {referenced_point}"
         else:
-            gemini_response = "Sorry, I couldn't find that point."
+            gemini_response = "Sorry, that point number doesn't exist in the list."
     else:
         # Normal question handling
         gemini_response, is_list_response = fetch_gemini_response(user_input)
 
         # If response is a list, store it for future reference
         if is_list_response:
-            st.session_state.list_response = gemini_response  # Store structured list for reference
+            st.session_state.list_response = parse_list_from_response(gemini_response)  # Store structured list
 
     # Display Gemini's response
     with st.chat_message("assistant"):
