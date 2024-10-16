@@ -26,6 +26,12 @@ def is_list(text):
     numbered_lines = [line for line in lines if re.match(r"^\d+\.", line.strip())]
     return len(numbered_lines) > 1
 
+def parse_list_from_response(response):
+    """ Parse a structured list from a response text. """
+    lines = response.split('\n')
+    list_items = [line.strip() for line in lines if re.match(r"^\d+\.", line.strip())]
+    return list_items
+
 def extract_point_number(user_input):
     """ Extract the point number from the user's follow-up query. """
     match = re.search(r'point (\d+)', user_input, re.IGNORECASE)
