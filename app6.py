@@ -1,12 +1,11 @@
 import os
 import streamlit as st
 from dotenv import load_dotenv
-import google.generativeai as gpt
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from langchain.memory import ConversationBufferMemory
 from functions import *
-from custom_gemini_wrapper import GeminiLLM  # Import the custom wrapper
+from custom_gemini_wrapper import GeminiLLM  # Import the custom Gemini wrapper
 
 # Load environment variables
 load_dotenv()
@@ -19,13 +18,10 @@ st.set_page_config(
 )
 
 API_KEY = os.getenv("GOOGLE_API_KEY")
-
-# Set up Google Gemini-Pro AI model
-gpt.configure(api_key=API_KEY)
-gemini_model = gpt.GenerativeModel('gemini-pro')
+MODEL_NAME = "gemini-pro"  # The model name you are using
 
 # Wrap the Gemini model to work with LangChain
-gemini_llm = GeminiLLM(model=gemini_model)
+gemini_llm = GeminiLLM(api_key=API_KEY, model_name=MODEL_NAME)
 
 # Initialize memory buffer to store conversation history
 if "memory" not in st.session_state:
